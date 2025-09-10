@@ -15,7 +15,6 @@ unsigned long long page2pfn(pid_t pid, void* addr)
 {
     char path[PATH_MAX];
     unsigned long long pfn = 0;
-    printf("addr=%llX\n", (unsigned long long)addr);
 
     snprintf(path, PATH_MAX, "/proc/%d/pagemap", pid);
 
@@ -43,8 +42,7 @@ unsigned long long page2pfn(pid_t pid, void* addr)
         goto exit;
     }
 
-    if (pfn == 0)
-    {
+    if (pfn == 0) {
         printf("error: %s\n", strerror(errno));
     }
 
@@ -89,7 +87,7 @@ exit:
     return pf;
 }
 
-int run_example()
+int run_cow_example()
 {
     // allocate a shared data structure
     char* buf = mmap(NULL, 4096, PROT_READ | PROT_WRITE,
@@ -118,7 +116,6 @@ int run_example()
         printf("Parent: Finished %p(0x%llx)=%s, flags=0x%llx\n", buf, v2a, buf, get_page_flags(v2a));
     }
 
-    getchar();
     munmap(buf, 4096);
     return 0;
 }
@@ -178,7 +175,7 @@ int main(int argc, char* argv[])
     }
 
     if (example && !pid && !vaddr) {
-        run_example();
+        run_cow_example();
         return 0;
     }
 
